@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <algorithm>
 #include <vector>
 
 class Num_counter_functor {
@@ -10,18 +11,18 @@ class Num_counter_functor {
         
         }
 
-        int get_sum() {
-            for (int i : vec_) {
-                if (i % 3 == 0) sum += i;
-            }
-            return sum;
+        Num_counter_functor() = default;
 
+        int get_sum() {
+            return sum;
+        }
+
+        void operator () (int a) {
+                   if (a % 3 == 0) { count += 1; sum += a; }
         }
 
         int get_count() {
-            for (int i : vec_) {
-                if (i % 3 == 0) count += 1;
-            }
+            
             return count;
         }
 
@@ -32,7 +33,8 @@ class Num_counter_functor {
 int main()
 {
     std::vector<int> vec = { 4, 1, 3, 6, 25, 54 };
-    Num_counter_functor counter(vec);
+    //Num_counter_functor counter(vec);
+    Num_counter_functor counter = std::for_each(vec.begin(), vec.end(), Num_counter_functor ());
     std::cout << "get_sum() = " << counter.get_sum() << "\n";
     std::cout << "get_count() = " << counter.get_count() << "\n";
     return 0;
